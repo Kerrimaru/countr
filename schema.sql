@@ -1,0 +1,6 @@
+CREATE TABLE counters (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name STRING,
+  count INTEGER
+);
+

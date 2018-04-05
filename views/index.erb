@@ -1,0 +1,9 @@
+<html>
+<body>
+<ul>
+  <% @counters.each do |counter| %>
+    <li><a href="/counters/<%= counter.id %>"><%= counter.name %></a></li>
+  <% end %>
+</ul>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<html>
+<body>
+<div id="counter"></div>
+<div>
+  <h2>Next steps</h2>
+  <ul>
+    <li>Put an element representing the counter into the div with id counter (name and count)</li>
+    <li>Make a button in that element</li>
+    <li>Make the button do something when it is clicked (e.g. alert)</li>
+    <li>Make the button alert the current value + 1 when it is clicked</li>
+    <li>Make the button alert the some json representing the new counter state (e.g. {"counter":{"count":4}} )</li>
+    <li>Send an XHR PUT request with the json to the back end</li>
+    <li>Update the element with the new values from the back end</li>
+  </ul>
+</body>
+<script type="text/javascript">
+var counter = <%= JSON.generate(@counter.as_json) %>
+
+// Your code goes here
+
+</script>
+</html>
