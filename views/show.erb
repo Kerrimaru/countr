@@ -15,8 +15,97 @@
 </body>
 <script type="text/javascript">
 var counter = <%= JSON.generate(@counter.as_json) %>
-
 // Your code goes here
+
+// function Counter(data){
+//   this.data = data;
+// }
+
+function render (){
+  var container = document.getElementById("counter");
+  container.innerHTML = '';
+  var butt_name = document.createElement("h2");
+  butt_name.innerHTML = "Name: " + counter.name;
+  container.appendChild(butt_name);
+
+  var count = document.createElement("h3");
+  count.id = "count_display";
+  count.innerHTML = "Count: " + counter.count;
+  container.appendChild(count);
+
+  var button = document.createElement("button");
+  button.innerHTML = 'Im a button';
+  container.appendChild(button);
+
+  button.addEventListener('click', function () {
+    counter.count ++;
+    countUp();
+
+  });
+}
+render()
+
+function countUp() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    console.log(counter)
+    if (this.readyState == 4 && this.status == 200) {
+      render()
+    }
+  };
+  //xhttp.open("GET",  <%= "/counters/#{@counter.id}" %>, true);
+  xhttp.open("PUT",  "/counters/" + <%="#{@counter.id}" %>, true);
+  //xhttp.open("PUT",  "/counters/" + <%="#{@counter.id}" %>, true);
+  //xhttp.send ();
+  xhttp.send(JSON.stringify({"counter":{"count":counter.count}}));
+}
+
+
+
+// var xhr = new XMLHttpRequest();
+// xhr.open("PUT", '/server', true);
+// //Send the proper header information along with the request
+// xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+// xhr.clicked = function() {//Call a function when the state changes.
+//     counter.count ++;
+// }
+// xhr.send({"counter":{"count":}});
+//
+// //xhr.send({ form: 'data' });
+
+///////////////////////////////////////////////////////////////////////////////
+// from stack overflow
+
+// var xhr = new XMLHttpRequest();
+// xhr.open('POST', 'somewhere', true);
+// xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+// xhr.onload = function () {
+//     // do something to response
+//     console.log(this.responseText);
+// };
+// xhr.send('user=person&pwd=password&organization=place&requiredkey=key');
+
+//////////////////////////////////////////////////////////////////////////////
+// from MDN
+// XMLHttpRequest.send(body)
+
+// var xhr = new XMLHttpRequest();
+// xhr.open("POST", '/server', true);
+// //Send the proper header information along with the request
+// xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+// xhr.onreadystatechange = function() {//Call a function when the state changes.
+//     if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+//         // Request finished. Do processing here.
+//     }
+// }
+// xhr.send("foo=bar&lorem=ipsum");
+// // xhr.send('string');
+// // xhr.send(new Blob());
+// // xhr.send(new Int8Array());
+// // xhr.send({ form: 'data' });
+// // xhr.send(document);
+///////////////////////////////////////////////////////////////////////////////
+
 
 </script>
 </html>
