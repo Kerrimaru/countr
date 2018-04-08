@@ -1,29 +1,17 @@
 <html>
-<body>
-<div id="counter"></div>
-<div>
-  <h2>Next steps</h2>
-  <ul>
-    <li>Put an element representing the counter into the div with id counter (name and count)</li>
-    <li>Make a button in that element</li>
-    <li>Make the button do something when it is clicked (e.g. alert)</li>
-    <li>Make the button alert the current value + 1 when it is clicked</li>
-    <li>Make the button alert the some json representing the new counter state (e.g. {"counter":{"count":4}} )</li>
-    <li>Send an XHR PUT request with the json to the back end</li>
-    <li>Update the element with the new values from the back end</li>
-  </ul>
-</body>
+  <body>
+    <div id="counter"></div>
+    <div>
+  </body>
 <script type="text/javascript">
+
 var counter = <%= JSON.generate(@counter.as_json) %>
-// Your code goes here
 
-// function Counter(data){
-//   this.data = data;
-// }
-
-function render (){
-  var container = document.getElementById("counter");
-  container.innerHTML = '';
+CreateButton.prototype.render = function(){
+  var self = this;  
+  var container = this.el;
+  container.innerHTML = '';  
+  
   var butt_name = document.createElement("h2");
   butt_name.innerHTML = "Name: " + counter.name;
   container.appendChild(butt_name);
@@ -34,78 +22,35 @@ function render (){
   container.appendChild(count);
 
   var button = document.createElement("button");
-  button.innerHTML = 'Im a button';
+  button.innerHTML = "I'm a button";
+  button.addEventListener('click', function(){    
+    self.data.count ++;
+    self.countUp();
+  });
   container.appendChild(button);
 
-  button.addEventListener('click', function () {
-    counter.count ++;
-    countUp();
-
-  });
+  return container;
 }
-render()
 
-function countUp() {
+CreateButton.prototype.countUp = function(){
+  self = this;
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
-    console.log(counter)
     if (this.readyState == 4 && this.status == 200) {
-      render()
+      self.render();
     }
-  };
-  //xhttp.open("GET",  <%= "/counters/#{@counter.id}" %>, true);
-  xhttp.open("PUT",  "/counters/" + <%="#{@counter.id}" %>, true);
-  //xhttp.open("PUT",  "/counters/" + <%="#{@counter.id}" %>, true);
-  //xhttp.send ();
+  } 
+  xhttp.open("PUT", "/counters/" + counter.id, true);
   xhttp.send(JSON.stringify({"counter":{"count":counter.count}}));
 }
 
+function CreateButton(el, data){
+  this.el = document.getElementById(el);
+  this.data = data; 
+  this.render();  
+}
 
-
-// var xhr = new XMLHttpRequest();
-// xhr.open("PUT", '/server', true);
-// //Send the proper header information along with the request
-// xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-// xhr.clicked = function() {//Call a function when the state changes.
-//     counter.count ++;
-// }
-// xhr.send({"counter":{"count":}});
-//
-// //xhr.send({ form: 'data' });
-
-///////////////////////////////////////////////////////////////////////////////
-// from stack overflow
-
-// var xhr = new XMLHttpRequest();
-// xhr.open('POST', 'somewhere', true);
-// xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-// xhr.onload = function () {
-//     // do something to response
-//     console.log(this.responseText);
-// };
-// xhr.send('user=person&pwd=password&organization=place&requiredkey=key');
-
-//////////////////////////////////////////////////////////////////////////////
-// from MDN
-// XMLHttpRequest.send(body)
-
-// var xhr = new XMLHttpRequest();
-// xhr.open("POST", '/server', true);
-// //Send the proper header information along with the request
-// xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-// xhr.onreadystatechange = function() {//Call a function when the state changes.
-//     if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-//         // Request finished. Do processing here.
-//     }
-// }
-// xhr.send("foo=bar&lorem=ipsum");
-// // xhr.send('string');
-// // xhr.send(new Blob());
-// // xhr.send(new Int8Array());
-// // xhr.send({ form: 'data' });
-// // xhr.send(document);
-///////////////////////////////////////////////////////////////////////////////
-
+var newCounter = new CreateButton('counter', counter);
 
 </script>
 </html>
