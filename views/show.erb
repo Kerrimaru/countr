@@ -7,11 +7,9 @@
 
 var counter = <%= JSON.generate(@counter.as_json) %>
 
-CreateButton.prototype.render = function(){
-  var self = this;  
+Counter.prototype.render = function(){
   var container = this.el;
   container.innerHTML = '';  
-  
   var butt_name = document.createElement("h2");
   butt_name.innerHTML = "Name: " + counter.name;
   container.appendChild(butt_name);
@@ -24,33 +22,33 @@ CreateButton.prototype.render = function(){
   var button = document.createElement("button");
   button.innerHTML = "I'm a button";
   button.addEventListener('click', function(){    
-    self.data.count ++;
-    self.countUp();
-  });
+    this.data.count ++;
+    this.countUp();
+  }.bind(this));
   container.appendChild(button);
 
   return container;
 }
 
-CreateButton.prototype.countUp = function(){
-  self = this;
+Counter.prototype.countUp = function(){
+  var self = this;
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
+    if (this.readyState == 4 && this.status == 200){
       self.render();
     }
-  } 
+  }
   xhttp.open("PUT", "/counters/" + counter.id, true);
   xhttp.send(JSON.stringify({"counter":{"count":counter.count}}));
 }
 
-function CreateButton(el, data){
+function Counter(el, data){
   this.el = document.getElementById(el);
   this.data = data; 
   this.render();  
 }
 
-var newCounter = new CreateButton('counter', counter);
+var newCounter = new Counter('counter', counter);
 
 </script>
 </html>
